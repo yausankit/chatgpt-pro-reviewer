@@ -1,0 +1,8 @@
+interface:
+  display_name: "ChatGPT Pro Reviewer"
+  short_description: "Use visible ChatGPT Pro for planning and review"
+  brand_color: "#10A37F"
+  default_prompt: "Use $chatgpt-pro-reviewer to critique this plan through my visible ChatGPT Pro session."
+
+policy:
+  allow_implicit_invocation: true
