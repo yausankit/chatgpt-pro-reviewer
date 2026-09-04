@@ -17,19 +17,6 @@
 
 它使用用户现有的网页登录状态，不需要 API Key，也不调用私有接口。
 
-### 验收结果
-
-一次真实网页验收成功完成：
-
-```text
-CODEX_PRO_SESSION_OK
-
-一个上线计划至少应明确系统稳定性异常、核心业务指标恶化、
-数据安全或合规风险三类回滚条件。
-```
-
-验收过程中确认了以下行为：新建独立会话、编辑框显示 `Pro`、提示词仅发送一次、返回内容与测试问题匹配。
-
 ### 前置条件
 
 - Codex Desktop，且支持可见浏览器的 computer-use 控制
@@ -145,19 +132,6 @@ It can:
 - wait for a stable response before returning it to Codex.
 
 It uses your existing browser login. No API key or private endpoint is required.
-
-### Acceptance test
-
-A real browser acceptance test completed successfully:
-
-```text
-CODEX_PRO_SESSION_OK
-
-A launch plan should define rollback conditions for system instability,
-degraded core business metrics, and data-security or compliance risks.
-```
-
-The test verified a separate conversation, visible `Pro` mode at the composer, a single submission, and a response matching the test question.
 
 ### Prerequisites
 
