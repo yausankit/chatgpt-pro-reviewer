@@ -1,6 +1,6 @@
 # ChatGPT Pro Reviewer for Codex
 
-让 Codex 通过你已登录的可见 ChatGPT 网页，将 Pro 模式作为一次性的规划、评审和第二意见顾问。
+一个调用网页版 ChatGPT Pro 的 Codex Skill。
 
 ## 中文
 
@@ -133,7 +133,7 @@ cp -R agents "$skill_dir/"
 
 ### Overview
 
-This Codex Skill uses your visible, signed-in ChatGPT web session and the Pro intelligence setting as a one-shot planning, review, and second-opinion consultant.
+A Codex Skill for calling ChatGPT Pro through its web interface.
 
 It can:
 
