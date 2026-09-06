@@ -1,6 +1,6 @@
 ---
 name: chatgpt-pro-reviewer
-description: Use the user's visible, signed-in ChatGPT web session in Pro mode as a one-shot planning or review consultant. Use when the user asks Codex to ask webpage ChatGPT Pro for a second opinion, plan, critique, or review. Do not use for ordinary web research or API calls.
+description: Use the user's visible, signed-in ChatGPT web session in Pro mode as a one-shot planning or review consultant, waiting for the complete answer before continuing dependent work. Use when the user asks Codex to ask webpage ChatGPT Pro for a second opinion, plan, critique, or review. Do not use for ordinary web research or API calls.
 ---
 
 # ChatGPT Pro Reviewer
@@ -23,6 +23,30 @@ transaction layer.
 - Never include credentials, cookies, private keys, or unrelated private data.
   If the requested material contains an apparent secret, stop and ask for a
   redacted version.
+
+## Wait before acting
+
+Treat the requested Pro consultation as a prerequisite for the work it informs.
+Keep that work pending until the answer meets step 10's completion criteria and
+Codex has read the entire answer. While waiting, limit activity to monitoring,
+status updates, and read-only context gathering that does not decide the outcome.
+Do not settle on a plan, edit project files, start experiments, or delegate
+implementation of the reviewed work. Parallel implementation is allowed only
+when the user explicitly authorizes it; a status question does not waive waiting.
+
+A successful send, an early tool return, a partial answer, or a polling timeout
+does not complete the consultation. Continue bounded waits on the same owned
+conversation without resubmitting. Do not invent an elapsed-time cutoff or end
+the turn merely promising to wait while generation is still active and polling
+is available. Preserve the conversation URL, sent prompt, and pending state
+across interruptions or context compaction, then recheck that conversation.
+
+Once the complete answer is read, explain its main recommendation and how it
+affects the next step before carrying out already-authorized work. A request for
+review alone ends with the review; it does not authorize implementation. If a
+real blocker or user-specified deadline prevents completion, report the pending
+consultation and blocker without replacing Pro's answer with Codex's own plan.
+Resume dependent work only after completion or an explicit user waiver.
 
 ## Direct browser workflow
 
@@ -87,10 +111,22 @@ transaction layer.
    the click outcome is unclear, inspect the page and stop instead of clicking
    again. A draft left in the composer is not a sent message.
 
-10. Wait in bounded intervals and keep the user informed at least once per minute.
-   The reply is complete when the assistant turn following the owned user turn is
-   present, generation/stop controls are gone, and its text is stable across two
-   fresh observations. Continue waiting while generation is visibly active.
+10. Poll the owned conversation in bounded intervals, typically 15-30 seconds,
+    with no single wait exceeding 60 seconds. Keep the user informed at least
+    once per minute. Complete the consultation only when all of these hold:
+
+    - A nonempty assistant answer follows this run's owned user turn. Thinking
+      indicators, progress notices, and error messages do not count as an answer.
+    - No thinking or generation activity remains, and stop controls are gone.
+      Absence of a stop control alone is insufficient.
+    - The answer text is unchanged across two fresh observations at least five
+      seconds apart, with no generation activity in either observation.
+    - Codex has retrieved and read the full answer, including any content beyond
+      a truncated tool preview.
+
+    Continue waiting while generation is active or completion remains unverified.
+    A timeout ends only that polling interval. Handle actual errors through the
+    failure boundary and keep dependent work pending.
 
 11. Return the exact assistant answer or a faithful Markdown transcription under
     a clearly labeled Pro-response section. State that the composer showed `Pro`
